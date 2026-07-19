@@ -220,7 +220,6 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
-            min-width: 600px; /* Prevents text squeezing on very small phone screens */
         }
 
         .results-table th {
@@ -313,6 +312,16 @@
             .summary-block {
                 gap: 20px;
             }
+
+            /* Adjust columns structure on tablet/mobile screens to guarantee visibility */
+            .col-subject { width: 55%; }
+            .col-details { width: 15%; }
+            .col-grade { width: 15%; }
+            .col-estimate { width: 15%; }
+            .results-table th, .results-table td {
+                padding: 10px 5px;
+                font-size: 11px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -325,6 +334,16 @@
                 width: 100%;
                 justify-content: space-between;
                 gap: 0;
+            }
+
+            /* Tighten up space on very small mobile screens (like iPhone SE/Portrait) */
+            .col-subject { width: 60%; }
+            .col-details { width: 10%; }
+            .col-grade { width: 15%; }
+            .col-estimate { width: 15%; }
+            .results-table th, .results-table td {
+                padding: 8px 3px;
+                font-size: 10.5px;
             }
         }
     </style>
