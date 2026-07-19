@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyU - بوابة الخدمات الطلابية</title>
+    
+    <!-- Tab Icon -->
+    <link rel="icon" type="image/png" href="tab.png">
+    
+    <!-- Google Fonts: El Messiri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Dashboard Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --dark-blue: #11213e;
+            --navy: #1b263b;
+            --light-bg: #f4f6f9;
+            --border-color: #e0e0e0;
+            --text-main: #333333;
+            --sidebar-width: 260px;
+            --card-gold: #d1991d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'El Messiri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- TOP NAVBAR --- */
+        .navbar {
+            background-color: var(--dark-blue);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            height: 55px;
+            z-index: 1000;
+            border-bottom: 2px solid #11213e;
+        }
+
+        .nav-right, .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .nav-center-date {
+            font-size: 11px;
+            color: #a0aab2;
+        }
+
+        /* --- MAIN WRAPPER --- */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            max-width: var(--sidebar-width);
+            background-color: var(--dark-blue);
+            color: white;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #1C294B;
+        }
+
+        .profile-section {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid #1C294B;
+        }
+
+        .profile-img {
+            width: 110px;
+            height: 155px;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .profile-detail {
+            font-size: 11px;
+            color: #a0aab2;
+            line-height: 1.5;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .sidebar-menu a {
+            text-decoration: none;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            font-size: 12px;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: var(--navy);
+            color: #fff;
+        }
+
+        .menu-item.active {
+            border-right: 4px solid var(--card-gold);
+            background-color: var(--card-gold);
+        }
+
+        .menu-link-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-link-content i {
+            width: 16px;
+            text-align: center;
+        }
+
+        /* --- CONTENT AREA --- */
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background-color: var(--light-bg);
+        }
+
+        /* --- SERVICES DASHBOARD GRID --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1px;
+            background-color: var(--border-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid-card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .service-card {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 15px;
+            text-align: center;
+            height: 100%;
+            min-height: 130px;
+            transition: background-color 0.2s;
+        }
+
+        .service-card:hover {
+            background-color: #f8fafc;
+        }
+
+        .service-card i {
+            font-size: 32px;
+            color: var(--card-gold);
+            margin-bottom: 12px;
+        }
+
+        .service-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .alternate-email-icon {
+            font-style: normal;
+            font-size: 36px;
+            color: var(--card-gold);
+            line-height: 32px;
+            font-weight: bold;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background-color: var(--dark-blue);
+            color: #a0aab2;
+            text-align: center;
+            padding: 8px;
+            font-size: 11px;
+            border-top: 1px solid #1C294B;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVBAR -->
+    <header class="navbar">
+        <div class="nav-right">
+            <button class="nav-icon-btn"><i class="fas fa-bars"></i></button>
+            <div class="nav-brand">MyU</div>
+            <button class="nav-icon-btn"><i class="fas fa-power-off"></i></button>
+            <button class="nav-icon-btn"><i class="fas fa-home"></i></button>
+            <button class="nav-icon-btn"><i class="fas fa-cog"></i></button>
+            <span style="font-size: 12px; margin-right: 10px; cursor:pointer;">En</span>
+        </div>
+        <div class="nav-center-date">أحد 19 يوليو 2026</div>
+        <div class="nav-left">
+            <span style="font-size: 12px; font-weight: bold;">بوابة الخدمات الطلابية</span>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        
+        <!-- RIGHT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <img src="student.png" alt="صورة الطالب" class="profile-img">
+                <div class="profile-name">أحمد فيصل</div>
+                <div class="profile-detail">جامعة المنصورة الأهلية</div>
+                <div class="profile-detail">الفرقة الثانية - المرحلة الأولى - الطب والجراحة نظام (2+5)</div>
+                <div class="profile-detail">كلية الطب البشري</div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <a href="#">
+                    <li class="menu-item"><div class="menu-link-content"><i class="fas fa-id-card"></i><span>البيانات الشخصية</span></div></li>
+                </a>
+                <!-- Link to Results Page -->
+                <a href="results.html">
+                    <li class="menu-item"><div class="menu-link-content"><i class="fas fa-poll"></i><span>النتائج الدراسية</span></div></li>
+                </a>
+                <a href="#">
+                    <li class="menu-item"><div class="menu-link-content"><i class="fas fa-calendar-alt"></i><span>الجدول الدراسي</span></div></li>
+                </a>
+                <a href="#">
+                    <li class="menu-item"><div class="menu-link-content"><i class="fas fa-envelope"></i><span>بريد الجامعة</span></div></li>
+                </a>
+                <a href="#">
+                    <li class="menu-item"><div class="menu-link-content"><i class="fas fa-shield-alt"></i><span>التربية العسكرية</span></div></li>
+                </a>
+                <a href="#">
+                    <li class="menu-item"><div class="menu-link-content"><i class="fas fa-file-invoice"></i><span>جدول الإمتحانات</span></div></li>
+                </a>
+                <a href="#">
+                    <li class="menu-item"><div class="menu-link-content"><i class="fas fa-edit"></i><span>إستبيان</span></div></li>
+                </a>
+                <a href="#">
+                    <li class="menu-item"><div class="menu-link-content"><i class="fas fa-heart"></i><span>الرغبات</span></div></li>
+                </a>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="content">
+            
+            <!-- SERVICES GRID -->
+            <div class="dashboard-grid">
+                
+                <!-- 1. البيانات الشخصية -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="far fa-address-card"></i>
+                        <span class="service-title">البيانات الشخصية</span>
+                    </div>
+                </a>
+
+                <!-- 2. النتائج الدراسية (Linked to results.html) -->
+                <a href="results.html" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="service-title">النتائج الدراسية</span>
+                    </div>
+                </a>
+
+                <!-- 3. الجدول الدراسي -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="far fa-calendar-alt"></i>
+                        <span class="service-title">الجدول الدراسي</span>
+                    </div>
+                </a>
+
+                <!-- 4. بريد الجامعة -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="alternate-email-icon">@</i>
+                        <span class="service-title" style="margin-top: 10px;">بريد الجامعة</span>
+                    </div>
+                </a>
+
+                <!-- 5. التربية العسكرية -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-user-shield"></i>
+                        <span class="service-title">التربية العسكرية</span>
+                    </div>
+                </a>
+
+                <!-- 6. جدول الإمتحانات -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="far fa-calendar-check"></i>
+                        <span class="service-title">جدول الإمتحانات</span>
+                    </div>
+                </a>
+
+                <!-- 7. استبيان -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="far fa-question-circle"></i>
+                        <span class="service-title">استبيان</span>
+                    </div>
+                </a>
+
+                <!-- 8. الرغبات -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span class="service-title">الرغبات</span>
+                    </div>
+                </a>
+
+                <!-- 9. مقررات إختيارية -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-tasks"></i>
+                        <span class="service-title">مقررات إختيارية</span>
+                    </div>
+                </a>
+
+                <!-- 10. رفع الصورة الشخصية -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="far fa-image"></i>
+                        <span class="service-title">رفع الصورة الشخصية</span>
+                    </div>
+                </a>
+
+                <!-- 11. تظلمات -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-balance-scale"></i>
+                        <span class="service-title">تظلمات</span>
+                    </div>
+                </a>
+
+                <!-- 12. رغبات المواد -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-paste"></i>
+                        <span class="service-title">رغبات المواد</span>
+                    </div>
+                </a>
+
+                <!-- 13. مقرراتي -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-book-open"></i>
+                        <span class="service-title">مقرراتي</span>
+                    </div>
+                </a>
+
+                <!-- 14. الرسوم -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="far fa-money-bill-alt"></i>
+                        <span class="service-title">الرسوم</span>
+                    </div>
+                </a>
+
+                <!-- 15. مركز الابتكار و الابداع -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-trophy"></i>
+                        <span class="service-title">مركز الابتكار و الابداع</span>
+                    </div>
+                </a>
+
+                <!-- 16. خدمات -->
+                <a href="#" class="grid-card-link">
+                    <div class="service-card">
+                        <i class="fas fa-ellipsis-h"></i>
+                        <span class="service-title">خدمات</span>
+                    </div>
+                </a>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- BOTTOM FOOTER -->
+    <footer class="footer">
+        <i class="fas fa-user-shield"></i> سياسة الخصوصية وأمن البيانات
+    </footer>
+
+</body>
+</html>
