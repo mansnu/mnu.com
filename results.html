@@ -86,6 +86,7 @@
             display: flex;
             flex: 1;
             overflow: hidden;
+            position: relative;
         }
 
         /* --- SIDEBAR --- */
@@ -99,6 +100,7 @@
             display: flex;
             flex-direction: column;
             border-left: 1px solid #1C294B;
+            transition: transform 0.3s ease, width 0.3s ease;
         }
 
         .profile-section {
@@ -203,6 +205,14 @@
             justify-content: space-between;
             align-items: center;
             color: #334155;
+            gap: 10px;
+        }
+
+        /* Responsive wrapper for table data */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* --- RESULTS TABLE --- */
@@ -210,6 +220,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 12px;
+            min-width: 600px; /* Prevents text squeezing on very small phone screens */
         }
 
         .results-table th {
@@ -244,6 +255,8 @@
             border-top: 2px solid var(--border-color);
             font-size: 12px;
             font-weight: bold;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .summary-block {
@@ -259,6 +272,60 @@
             padding: 8px;
             font-size: 11px;
             border-top: 1px solid #1C294B;
+            z-index: 1000;
+        }
+
+        /* Overlay for mobile view when sidebar is active */
+        .sidebar-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 998;
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .nav-center-date {
+                display: none; /* Hide date on small screens to fit options */
+            }
+
+            .sidebar {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                z-index: 999;
+                transform: translateX(100%); /* Hide sidebar off-screen by default */
+            }
+
+            .sidebar.open {
+                transform: translateX(0); /* Slide-in animation for mobile */
+            }
+
+            .sidebar.open + .sidebar-overlay {
+                display: block;
+            }
+            
+            .summary-block {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .table-summary {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .summary-block {
+                width: 100%;
+                justify-content: space-between;
+                gap: 0;
+            }
         }
     </style>
 </head>
@@ -267,7 +334,7 @@
     <!-- TOP NAVBAR -->
     <header class="navbar">
         <div class="nav-right">
-            <button class="nav-icon-btn"><i class="fas fa-bars"></i></button>
+            <button class="nav-icon-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
             <div class="nav-brand">MyU</div>
             <button class="nav-icon-btn"><i class="fas fa-power-off"></i></button>
             <button class="nav-icon-btn"><i class="fas fa-home"></i></button>
@@ -284,7 +351,7 @@
     <div class="main-container">
         
         <!-- RIGHT SIDEBAR -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="profile-section">
                 <!-- Egg-shaped Avatar -->
                 <img src="student.png" alt="صورة الطالب" class="profile-img">
@@ -306,6 +373,9 @@
             </ul>
         </aside>
 
+        <!-- Overlay element for dismissing sidebar on mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         <!-- MAIN CONTENT AREA -->
         <main class="content">
             <h1 class="page-title">النتائج الدراسية</h1>
@@ -317,78 +387,80 @@
                     <i class="fas fa-chevron-up"></i>
                 </div>
                 <div class="accordion-content">
-                    <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th class="col-subject">المقرر</th>
-                                <th class="col-details">التفاصيل</th>
-                                <th class="col-grade">الدرجة</th>
-                                <th class="col-estimate">التقدير</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="col-subject">Cardiovascular System - الفصل الدراسي الأول</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">142</td>
-                                <td class="col-estimate">A</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Respiratory System - الفصل الدراسي الأول</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">113</td>
-                                <td class="col-estimate">B</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Urinary System - الفصل الدراسي الأول</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">54</td>
-                                <td class="col-estimate">B</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Early Clinical Experience 2 - الفصل الدراسي الأول</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">20</td>
-                                <td class="col-estimate">D</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Elective I - الفصل الدراسي الأول</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">29</td>
-                                <td class="col-estimate">P</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Central Nervous and Special Senses Systems, Behavioral science and Psychology - الفصل الدراسي الثاني</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">194</td>
-                                <td class="col-estimate">A</td>
-                            </tr>
-                            <tr class="row-failed">
-                                <td class="col-subject">Endocrine, and Reproductive System - الفصل الدراسي الثاني</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">58</td>
-                                <td class="col-estimate">F</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Research and biostatistics - الفصل الدراسي الثاني</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">54</td>
-                                <td class="col-estimate">A</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Early Clinical Experience 3 - الفصل الدراسي الثاني</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">27</td>
-                                <td class="col-estimate">A</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Elective II - الفصل الدراسي الثاني</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">29</td>
-                                <td class="col-estimate">P</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-subject">المقرر</th>
+                                    <th class="col-details">التفاصيل</th>
+                                    <th class="col-grade">الدرجة</th>
+                                    <th class="col-estimate">التقدير</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="col-subject">Cardiovascular System - الفصل الدراسي الأول</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">142</td>
+                                    <td class="col-estimate">A</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Respiratory System - الفصل الدراسي الأول</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">113</td>
+                                    <td class="col-estimate">B</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Urinary System - الفصل الدراسي الأول</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">54</td>
+                                    <td class="col-estimate">B</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Early Clinical Experience 2 - الفصل الدراسي الأول</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">20</td>
+                                    <td class="col-estimate">D</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Elective I - الفصل الدراسي الأول</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">29</td>
+                                    <td class="col-estimate">P</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Central Nervous and Special Senses Systems, Behavioral science and Psychology - الفصل الدراسي الثاني</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">194</td>
+                                    <td class="col-estimate">A</td>
+                                </tr>
+                                <tr class="row-failed">
+                                    <td class="col-subject">Endocrine, and Reproductive System - الفصل الدراسي الثاني</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">58</td>
+                                    <td class="col-estimate">F</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Research and biostatistics - الفصل الدراسي الثاني</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">54</td>
+                                    <td class="col-estimate">A</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Early Clinical Experience 3 - الفصل الدراسي الثاني</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">27</td>
+                                    <td class="col-estimate">A</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Elective II - الفصل الدراسي الثاني</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">29</td>
+                                    <td class="col-estimate">P</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <div class="table-summary">
                         <div>المجموع: 626</div>
@@ -407,72 +479,74 @@
                     <i class="fas fa-chevron-up"></i>
                 </div>
                 <div class="accordion-content">
-                    <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th class="col-subject">المقرر</th>
-                                <th class="col-details">التفاصيل</th>
-                                <th class="col-grade">الدرجة</th>
-                                <th class="col-estimate">التقدير</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="col-subject">Principles of Anatomy - Embryology and Physiology</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">166</td>
-                                <td class="col-estimate">A</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Principles of Histology Biochemistry and Genetics</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">153</td>
-                                <td class="col-estimate">A</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Professionalism Communication and Medical ethics</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">43</td>
-                                <td class="col-estimate">A</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Early Clinical Experience 1</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">26</td>
-                                <td class="col-estimate">A</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Hematopoietic and Immune System</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">39</td>
-                                <td class="col-estimate">C</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Musculoskeletal System</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">93</td>
-                                <td class="col-estimate">C</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Principles of Pathology Microbiology, Parasitology and Pharmacology</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">118</td>
-                                <td class="col-estimate">D</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">Medical Terminology</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">30</td>
-                                <td class="col-estimate">P</td>
-                            </tr>
-                            <tr>
-                                <td class="col-subject">القضايا المجتمعية</td>
-                                <td class="col-details"></td>
-                                <td class="col-grade">22</td>
-                                <td class="col-estimate">P</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-subject">المقرر</th>
+                                    <th class="col-details">التفاصيل</th>
+                                    <th class="col-grade">الدرجة</th>
+                                    <th class="col-estimate">التقدير</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="col-subject">Principles of Anatomy - Embryology and Physiology</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">166</td>
+                                    <td class="col-estimate">A</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Principles of Histology Biochemistry and Genetics</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">153</td>
+                                    <td class="col-estimate">A</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Professionalism Communication and Medical ethics</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">43</td>
+                                    <td class="col-estimate">A</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Early Clinical Experience 1</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">26</td>
+                                    <td class="col-estimate">A</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Hematopoietic and Immune System</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">39</td>
+                                    <td class="col-estimate">C</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Musculoskeletal System</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">93</td>
+                                    <td class="col-estimate">C</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Principles of Pathology Microbiology, Parasitology and Pharmacology</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">118</td>
+                                    <td class="col-estimate">D</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">Medical Terminology</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">30</td>
+                                    <td class="col-estimate">P</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-subject">القضايا المجتمعية</td>
+                                    <td class="col-details"></td>
+                                    <td class="col-grade">22</td>
+                                    <td class="col-estimate">P</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     
                     <div class="table-summary">
                         <div>المجموع: 638</div>
@@ -494,6 +568,7 @@
 
     <!-- INTERACTION JAVASCRIPT -->
     <script>
+        // Accordion logic
         document.querySelectorAll('.accordion-header').forEach(header => {
             header.addEventListener('click', () => {
                 const content = header.nextElementSibling;
@@ -508,6 +583,18 @@
                 }
             });
         });
+
+        // Mobile responsive sidebar toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+        }
+
+        menuToggle.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
     </script>
 </body>
 </html>
