@@ -179,25 +179,28 @@
             flex: 1;
             padding: 30px;
             overflow-y: auto;
-            background-color: var(--light-bg);
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
 
         /* --- SERVICES DASHBOARD GRID --- */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 1px;
-            background-color: var(--border-color);
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0; 
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            overflow: hidden;
-            max-width: 1200px;
-            margin: 0 auto;
+            background-color: var(--border-color);
+            width: 100%;
+            max-width: 1000px;
         }
 
         .grid-card-link {
             text-decoration: none;
             color: inherit;
+            background-color: #ffffff;
+            border: 1px solid #f0f0f0;
         }
 
         .service-card {
@@ -206,15 +209,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 25px 15px;
+            padding: 35px 15px;
             text-align: center;
             height: 100%;
-            min-height: 130px;
+            min-height: 140px;
             transition: background-color 0.2s;
         }
 
         .service-card:hover {
-            background-color: #f8fafc;
+            background-color: #fafafa;
         }
 
         .service-card i {
@@ -226,7 +229,7 @@
         .service-title {
             font-size: 13px;
             font-weight: 600;
-            color: #475569;
+            color: #334155;
         }
 
         .alternate-email-icon {
@@ -245,6 +248,72 @@
             padding: 8px;
             font-size: 11px;
             border-top: 1px solid #1C294B;
+        }
+
+        /* ==========================================================================
+           حلال المشاكل: قواعد الشاشات الصغيرة (الموبايل)
+           ========================================================================== */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto; /* السماح بالتمرير الكامل للصفحة */
+                height: auto;
+            }
+
+            .navbar {
+                height: auto;
+                padding: 10px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .nav-center-date {
+                order: 3; /* نقل التاريخ ليكون في سطر منفصل تلقائياً */
+                width: 100%;
+                text-align: center;
+                margin-top: 4px;
+            }
+
+            .main-container {
+                flex-direction: column; /* ترتيب القائمة الجانبية والكروت تحت بعض عمودياً */
+                overflow: visible;
+            }
+
+            .sidebar {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 100% !important;
+                border-left: none;
+                border-bottom: 2px solid #1C294B;
+                overflow-y: visible;
+            }
+
+            .content {
+                padding: 15px;
+                overflow-y: visible;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr); /* تقسيم الكروت لعمودين ممتازين على الهاتف */
+            }
+
+            .service-card {
+                padding: 20px 10px;
+                min-height: 115px;
+            }
+
+            .service-card i, .alternate-email-icon {
+                font-size: 26px;
+                margin-bottom: 8px;
+            }
+            
+            .alternate-email-icon {
+                line-height: 26px;
+            }
+
+            .service-title {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -283,7 +352,6 @@
                 <a href="#">
                     <li class="menu-item"><div class="menu-link-content"><i class="fas fa-id-card"></i><span>البيانات الشخصية</span></div></li>
                 </a>
-                <!-- Link to Results Page -->
                 <a href="results.html">
                     <li class="menu-item"><div class="menu-link-content"><i class="fas fa-poll"></i><span>النتائج الدراسية</span></div></li>
                 </a>
@@ -322,7 +390,7 @@
                     </div>
                 </a>
 
-                <!-- 2. النتائج الدراسية (Linked to results.html) -->
+                <!-- 2. النتائج الدراسية -->
                 <a href="results.html" class="grid-card-link">
                     <div class="service-card">
                         <i class="fas fa-chart-bar"></i>
