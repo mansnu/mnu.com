@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyU - بوابة الخدمات الطلابية</title>
+    
+    <!-- Corrected Google Fonts to fetch El Messiri properly with Arabic support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Dashboard Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-blue: #11213e;
+            --navy: #1b263b;
+            --light-bg: #f4f6f9;
+            --border-color: #e0e0e0;
+            --text-main: #333333;
+            --accent-yellow: #fff9db;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* Updated font family global rule here to use El Messiri */
+            font-family: 'El Messiri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- TOP NAVBAR --- */
+        .navbar {
+            background-color: var(--dark-blue);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            height: 55px;
+            z-index: 1000;
+            border-bottom: 2px solid #11213e;
+        }
+
+        .nav-right, .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .nav-center-date {
+            font-size: 11px;
+            color: #a0aab2;
+        }
+
+        /* --- MAIN WRAPPER --- */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            max-width: var(--sidebar-width);
+            background-color: var(--dark-blue);
+            color: white;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #1C294B;
+        }
+
+        .profile-section {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid #1C294B;
+        }
+
+        /* Egg-shaped styling constraint */
+        .profile-img {
+            width: 110px;
+            height: 155px;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .profile-detail {
+            font-size: 11px;
+            color: #a0aab2;
+            line-height: 1.5;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            font-size: 12px;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: var(--navy);
+            color: #fff;
+        }
+
+        .menu-item.active {
+            border-right: 4px solid #d1991d;
+            background-color: #d1991d;
+        }
+
+        .menu-link-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-link-content i {
+            width: 16px;
+            text-align: center;
+        }
+
+        /* --- CONTENT AREA --- */
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--light-bg);
+        }
+
+        .page-title {
+            font-size: 18px;
+            color: var(--navy);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* --- ACCORDION CARD --- */
+        .accordion-card {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background-color: #e2e8f0;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #334155;
+        }
+
+        /* --- RESULTS TABLE --- */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .results-table th {
+            text-align: right;
+            padding: 10px;
+            color: #555;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-color);
+            background-color: #f8fafc;
+        }
+
+        .results-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .col-subject { width: 50%; text-align: right; }
+        .col-details { width: 20%; text-align: right; color: #888; }
+        .col-grade { width: 15%; text-align: center; }
+        .col-estimate { width: 15%; text-align: center; }
+
+        .row-failed {
+            background-color: var(--accent-yellow);
+        }
+
+        /* --- TABLE FOOTER SUMMARY --- */
+        .table-summary {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f8fafc;
+            padding: 12px 15px;
+            border-top: 2px solid var(--border-color);
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .summary-block {
+            display: flex;
+            gap: 40px;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background-color: var(--dark-blue);
+            color: #a0aab2;
+            text-align: center;
+            padding: 8px;
+            font-size: 11px;
+            border-top: 1px solid #1C294B;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVBAR -->
+    <header class="navbar">
+        <div class="nav-right">
+            <button class="nav-icon-btn"><i class="fas fa-bars"></i></button>
+            <div class="nav-brand">MyU</div>
+            <button class="nav-icon-btn"><i class="fas fa-power-off"></i></button>
+            <button class="nav-icon-btn"><i class="fas fa-home"></i></button>
+            <button class="nav-icon-btn"><i class="fas fa-cog"></i></button>
+            <span style="font-size: 12px; margin-right: 10px; cursor:pointer;">En</span>
+        </div>
+        <div class="nav-center-date">أحد 19 يوليو 2026</div>
+        <div class="nav-left">
+            <span style="font-size: 12px; font-weight: bold;">بوابة الخدمات الطلابية</span>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        
+        <!-- RIGHT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <!-- Egg-shaped Avatar -->
+                <img src="student.png" alt="صورة الطالب" class="profile-img">
+                <div class="profile-name">أحمد فيصل</div>
+                <div class="profile-detail">جامعة المنصورة الأهلية</div>
+                <div class="profile-detail">الفرقة الثانية - المرحلة الأولى - الطب والجراحة نظام (2+5)</div>
+                <div class="profile-detail">كلية الطب البشري</div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="menu-item"><div class="menu-link-content"><i class="fas fa-id-card"></i><span>البيانات الشخصية</span></div></li>
+                <li class="menu-item active"><div class="menu-link-content"><i class="fas fa-poll"></i><span>النتائج الدراسية</span></div></li>
+                <li class="menu-item"><div class="menu-link-content"><i class="fas fa-calendar-alt"></i><span>الجدول الدراسي</span></div></li>
+                <li class="menu-item"><div class="menu-link-content"><i class="fas fa-envelope"></i><span>بريد الجامعة</span></div></li>
+                <li class="menu-item"><div class="menu-link-content"><i class="fas fa-shield-alt"></i><span>التربية العسكرية</span></div></li>
+                <li class="menu-item"><div class="menu-link-content"><i class="fas fa-file-invoice"></i><span>جدول الإمتحانات</span></div></li>
+                <li class="menu-item"><div class="menu-link-content"><i class="fas fa-edit"></i><span>إستبيان</span></div></li>
+                <li class="menu-item"><div class="menu-link-content"><i class="fas fa-heart"></i><span>الرغبات</span></div></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="content">
+            <h1 class="page-title">النتائج الدراسية</h1>
+
+            <!-- ACCORDION 1: الفرقة الثانية -->
+            <div class="accordion-card">
+                <div class="accordion-header">
+                    <span>الفرقة الثانية-المرحلة الأولى-الطب والجراحة نظام (2+5)-كلية الطب البشري 2025-2026</span>
+                    <i class="fas fa-chevron-up"></i>
+                </div>
+                <div class="accordion-content">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th class="col-subject">المقرر</th>
+                                <th class="col-details">التفاصيل</th>
+                                <th class="col-grade">الدرجة</th>
+                                <th class="col-estimate">التقدير</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="col-subject">Cardiovascular System - الفصل الدراسي الأول</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">142</td>
+                                <td class="col-estimate">A</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Respiratory System - الفصل الدراسي الأول</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">113</td>
+                                <td class="col-estimate">B</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Urinary System - الفصل الدراسي الأول</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">54</td>
+                                <td class="col-estimate">B</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Early Clinical Experience 2 - الفصل الدراسي الأول</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">20</td>
+                                <td class="col-estimate">D</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Elective I - الفصل الدراسي الأول</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">29</td>
+                                <td class="col-estimate">P</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Central Nervous and Special Senses Systems, Behavioral science and Psychology - الفصل الدراسي الثاني</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">194</td>
+                                <td class="col-estimate">A</td>
+                            </tr>
+                            <tr class="row-failed">
+                                <td class="col-subject">Endocrine, and Reproductive System - الفصل الدراسي الثاني</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">58</td>
+                                <td class="col-estimate">F</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Research and biostatistics - الفصل الدراسي الثاني</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">54</td>
+                                <td class="col-estimate">A</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Early Clinical Experience 3 - الفصل الدراسي الثاني</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">27</td>
+                                <td class="col-estimate">A</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Elective II - الفصل الدراسي الثاني</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">29</td>
+                                <td class="col-estimate">P</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="table-summary">
+                        <div>المجموع: 626</div>
+                        <div class="summary-block">
+                            <span>التقدير: جيد جداً</span>
+                            <span>النسبة: 81.62%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACCORDION 2: الفرقة الأولى -->
+            <div class="accordion-card">
+                <div class="accordion-header">
+                    <span>الفرقة الأولى-المرحلة الأولى-الطب والجراحة نظام (2+5)-كلية الطب البشري 2024-2025</span>
+                    <i class="fas fa-chevron-up"></i>
+                </div>
+                <div class="accordion-content">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th class="col-subject">المقرر</th>
+                                <th class="col-details">التفاصيل</th>
+                                <th class="col-grade">الدرجة</th>
+                                <th class="col-estimate">التقدير</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="col-subject">Principles of Anatomy - Embryology and Physiology</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">166</td>
+                                <td class="col-estimate">A</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Principles of Histology Biochemistry and Genetics</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">153</td>
+                                <td class="col-estimate">A</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Professionalism Communication and Medical ethics</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">43</td>
+                                <td class="col-estimate">A</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Early Clinical Experience 1</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">26</td>
+                                <td class="col-estimate">A</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Hematopoietic and Immune System</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">39</td>
+                                <td class="col-estimate">C</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Musculoskeletal System</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">93</td>
+                                <td class="col-estimate">C</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Principles of Pathology Microbiology, Parasitology and Pharmacology</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">118</td>
+                                <td class="col-estimate">D</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">Medical Terminology</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">30</td>
+                                <td class="col-estimate">P</td>
+                            </tr>
+                            <tr>
+                                <td class="col-subject">القضايا المجتمعية</td>
+                                <td class="col-details"></td>
+                                <td class="col-grade">22</td>
+                                <td class="col-estimate">P</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="table-summary">
+                        <div>المجموع: 638</div>
+                        <div class="summary-block">
+                            <span>التقدير: جيد جداً</span>
+                            <span>النسبة: 75.95%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- BOTTOM FOOTER -->
+    <footer class="footer">
+        <i class="fas fa-user-shield"></i> سياسة الخصوصية وأمن البيانات
+    </footer>
+
+    <!-- INTERACTION JAVASCRIPT -->
+    <script>
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('i');
+                
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    icon.className = 'fas fa-chevron-up';
+                } else {
+                    content.style.display = 'none';
+                    icon.className = 'fas fa-chevron-down';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
